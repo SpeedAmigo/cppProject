@@ -7,17 +7,22 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "I_interaction.h"
 
 
 AABasePlayerCharacter::AABasePlayerCharacter()
 {
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(GetRootComponent());
-	CameraBoom->TargetArmLength = 150.f;
-	CameraBoom->bUsePawnControlRotation = true;
+	CameraBoom -> SetupAttachment(GetRootComponent());
+	CameraBoom -> TargetArmLength = 150.f;
+	CameraBoom -> bUsePawnControlRotation = true;
+	
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
-	ViewCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	ViewCamera->bUsePawnControlRotation = false;
+	ViewCamera -> SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	ViewCamera -> bUsePawnControlRotation = false;
+
+	// Create interaction component
+	InteractionComponent = CreateDefaultSubobject<UI_interaction>(TEXT("InteractionComponent"));
 }
 
 void AABasePlayerCharacter::Move(const FInputActionValue& InputActionValue)
@@ -48,7 +53,15 @@ void AABasePlayerCharacter::Look(const FInputActionValue& InputActionValue)
 
 void AABasePlayerCharacter::Interact() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hello Unreal!"));
+	// Forward interaction to the interaction component if available
+	if (InteractionComponent)
+	{
+		InteractionComponent->Interact(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Interact called but InteractionComponent is null"));
+	}
 }
 
 void AABasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
