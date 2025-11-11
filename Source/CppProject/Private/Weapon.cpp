@@ -48,6 +48,16 @@ void AWeapon::Pick_Up(AActor* actor)
 
 void AWeapon::DetectCollision(bool value)
 {
+	/*if (!BoxCollider)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No BoxCollider"));
+		return;
+	}
+
+	if (value)
+	{
+		BoxCollider->SetCollisionEnabled(value? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
+	}*/
 }
 
 

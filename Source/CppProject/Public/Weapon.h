@@ -7,8 +7,6 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
-class UBoxComponent;
-
 UCLASS()
 class CPPPROJECT_API AWeapon : public AItem
 {

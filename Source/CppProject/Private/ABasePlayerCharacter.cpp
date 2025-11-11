@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "I_interaction.h"
+#include "Weapon.h"
 
 
 AABasePlayerCharacter::AABasePlayerCharacter()
@@ -81,6 +82,10 @@ void AABasePlayerCharacter::AttackStart()
 	if (!Weapon) return;
 	
 	Weapon->SetActorEnableCollision(true);
+
+	AWeapon* Axe = Cast<AWeapon>(Weapon);
+
+	Axe->DetectCollision(true);
 	
 	UE_LOG(LogTemp, Warning, TEXT("Attack Started!"));
 }

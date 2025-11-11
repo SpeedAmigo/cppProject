@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
 
+
 UCLASS()
 class CPPPROJECT_API AItem : public AActor, public IInteractable
 {
@@ -20,7 +21,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
