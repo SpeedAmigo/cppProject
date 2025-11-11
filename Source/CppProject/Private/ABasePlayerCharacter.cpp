@@ -64,6 +64,12 @@ void AABasePlayerCharacter::Interact()
 	}
 }
 
+void AABasePlayerCharacter::Attack()
+{
+	IsAttacking = true;
+}
+
+
 void AABasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -82,5 +88,6 @@ void AABasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &AABasePlayerCharacter::Look);
 		Input->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		Input->BindAction(InteractAction, ETriggerEvent::Started, this, &AABasePlayerCharacter::Interact);
+		Input->BindAction(AttackAction, ETriggerEvent::Started, this, &AABasePlayerCharacter::Attack);
 	}
 }

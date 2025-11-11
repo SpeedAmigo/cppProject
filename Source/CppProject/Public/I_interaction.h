@@ -17,12 +17,13 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	void Interact(AActor* actor);
-
+public:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Interaction")
 	float TraceDistance = 500.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "CurrentItem")
 	AActor* CurrentItem;
+	
+	void Interact(AActor* actor);
 };
