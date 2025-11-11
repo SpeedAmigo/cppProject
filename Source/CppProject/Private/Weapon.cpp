@@ -4,6 +4,7 @@
 #include "Weapon.h"
 
 #include "ABasePlayerCharacter.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Character.h"
 
 // Sets default values
@@ -17,7 +18,6 @@ AWeapon::AWeapon()
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -44,6 +44,10 @@ void AWeapon::Pick_Up(AActor* actor)
 	SetActorEnableCollision(false);
 	
 	UE_LOG(LogTemp, Display, TEXT("Pick Up"));
+}
+
+void AWeapon::DetectCollision(bool value)
+{
 }
 
 

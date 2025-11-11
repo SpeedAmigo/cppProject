@@ -20,7 +20,7 @@ AABasePlayerCharacter::AABasePlayerCharacter()
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera -> SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	ViewCamera -> bUsePawnControlRotation = false;
-
+	
 	// Create interaction component
 	InteractionComponent = CreateDefaultSubobject<UI_interaction>(TEXT("InteractionComponent"));
 }
@@ -66,9 +66,35 @@ void AABasePlayerCharacter::Interact()
 
 void AABasePlayerCharacter::Attack()
 {
-	IsAttacking = true;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (AnimInstance && AttackMontage)
+	{
+		AnimInstance->Montage_Play(AttackMontage);
+	}
 }
 
+void AABasePlayerCharacter::AttackStart()
+{
+	AActor* Weapon = InteractionComponent->CurrentItem;
+	
+	if (!Weapon) return;
+	
+	Weapon->SetActorEnableCollision(true);
+	
+	UE_LOG(LogTemp, Warning, TEXT("Attack Started!"));
+}
+
+void AABasePlayerCharacter::AttackEnd()
+{
+	AActor* Weapon = InteractionComponent->CurrentItem;
+	
+	if (!Weapon) return;
+	
+	Weapon->SetActorEnableCollision(false);
+	
+	UE_LOG(LogTemp, Warning, TEXT("Attack Ended!"));
+}
 
 void AABasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

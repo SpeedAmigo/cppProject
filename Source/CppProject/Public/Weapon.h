@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
 class CPPPROJECT_API AWeapon : public AItem
 {
@@ -20,9 +22,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Pick_Up(AActor* actor) override;
+
+	void DetectCollision(bool value);
 };

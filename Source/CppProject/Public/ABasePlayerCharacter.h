@@ -12,6 +12,7 @@ class USpringArmComponent;
 class UInputAction;
 class UInputMappingContext;
 class UI_interaction;
+class UAnimInstance;
 
 UCLASS()
 class CPPPROJECT_API AABasePlayerCharacter : public ABaseCharacter
@@ -25,6 +26,12 @@ protected:
 	void Look(const FInputActionValue& InputActionValue);
 	void Interact();
 	void Attack();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackStart();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
@@ -45,9 +52,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* InteractAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	bool IsAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* AttackMontage;
 
 private:
 
@@ -55,7 +62,7 @@ private:
 	USpringArmComponent* CameraBoom;
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* ViewCamera;
-
+	
 	// Interaction component that handles interaction logic (trace, interface calls)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interaction", meta=(AllowPrivateAccess="true"))
 	UI_interaction* InteractionComponent;
