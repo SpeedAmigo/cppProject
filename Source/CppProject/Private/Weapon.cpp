@@ -12,12 +12,15 @@ AWeapon::AWeapon()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
 }
 
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Collider = Cast<UBoxComponent>(GetDefaultSubobjectByName(TEXT("BoxCollision")));
 }
 
 // Called every frame
@@ -48,7 +51,7 @@ void AWeapon::Pick_Up(AActor* actor)
 
 void AWeapon::DetectCollision(bool value)
 {
-	/*if (!BoxCollider)
+	if (!Collider)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No BoxCollider"));
 		return;
@@ -56,8 +59,8 @@ void AWeapon::DetectCollision(bool value)
 
 	if (value)
 	{
-		BoxCollider->SetCollisionEnabled(value? ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
-	}*/
+		Collider->SetCollisionEnabled(value? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+	}
 }
 
 
