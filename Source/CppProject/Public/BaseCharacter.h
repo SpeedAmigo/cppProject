@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class AWeapon; // Forward declare the weapon class
+
 UCLASS()
 class CPPPROJECT_API ABaseCharacter : public ACharacter
 {
@@ -19,7 +21,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	AWeapon* EquippedWeapon;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

@@ -25,6 +25,18 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* Collider;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bShowDebugTrace = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	USceneComponent* TraceStart;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	USceneComponent* TraceEnd;
+	
+	UPROPERTY()
+	TArray<AActor*> HitActors;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,4 +44,8 @@ public:
 	virtual void Pick_Up(AActor* actor) override;
 
 	void DetectCollision(bool value);
+	void BoxTrace(FHitResult& OutHit);
+	void OnHit(const FHitResult& HitResult);
+	void PerformBoxTrace();
+	void ClearHitActors();
 };

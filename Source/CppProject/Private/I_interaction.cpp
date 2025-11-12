@@ -1,6 +1,8 @@
 #include "I_interaction.h"
 
 #include "Interactable.h"
+#include "BaseCharacter.h"
+#include "Weapon.h"
 
 // Sets default values for this component's properties
 UI_interaction::UI_interaction()
@@ -52,6 +54,23 @@ void UI_interaction::Interact(AActor* actor)
 				IInteractable::Execute_Interact(HitActor, GetOwner());
 
 				CurrentItem = HitActor;
+
+				// If owner is a BaseCharacter, assign the hit actor as the equipped weapon
+				ABaseCharacter* OwnerChar = Cast<ABaseCharacter>(GetOwner());
+				if (OwnerChar)
+				{
+					AWeapon* HitWeapon = Cast<AWeapon>(HitActor);
+					if (HitWeapon)
+					{
+						OwnerChar->EquippedWeapon = HitWeapon;
+						UE_LOG(LogTemp, Log, TEXT("%s equipped %s"), *OwnerChar->GetName(), *HitWeapon->GetName());
+					}
+					else
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Hit actor is not a weapon: %s"), *HitActor->GetName());
+					}
+				}
+
 				UE_LOG(LogTemp, Warning, TEXT("Interacted with %s"), *HitActor->GetName());
 			}
 		}
@@ -61,4 +80,3 @@ void UI_interaction::Interact(AActor* actor)
 		UE_LOG(LogTemp, Warning, TEXT("Nothing hit"));
 	}
 }
-

@@ -6,13 +6,20 @@
 #include "ABasePlayerCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Character.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AWeapon::AWeapon()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 	
+	TraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("TraceStart"));
+	TraceStart->SetupAttachment(RootComponent);
+
+	TraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("TraceEnd"));
+	TraceEnd->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -63,4 +70,92 @@ void AWeapon::DetectCollision(bool value)
 	}
 }
 
+void AWeapon::BoxTrace(FHitResult& OutHit)
+{
+	if (!TraceStart || !TraceEnd || !Collider) return;
+
+	const FVector Start = TraceStart->GetComponentLocation();
+	const FVector End = TraceEnd->GetComponentLocation();
+	
+	// Pobierz wymiary box collider z SwordHitbox
+	const FVector BoxExtent = Collider->GetScaledBoxExtent();
+	
+	// Pobierz rotacjê z SwordHitbox (zamiast z TraceStart)
+	const FRotator BoxRotation = Collider->GetComponentRotation();
+	
+	// Ustawienie kana³ów kolizji do ignorowania
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
+	ActorsToIgnore.Add(GetOwner());
+	
+	// Dodaj wszystkich ju¿ trafionych aktorów do ignorowania
+	ActorsToIgnore.Append(HitActors);
+
+	// Wykonanie box trace z wymiarami SwordHitbox
+	const bool bHit = UKismetSystemLibrary::BoxTraceSingle(
+		this,
+		Start,
+		End,
+		BoxExtent,
+		BoxRotation,
+		UEngineTypes::ConvertToTraceType(ECC_Pawn),
+		false,
+		ActorsToIgnore,
+		bShowDebugTrace ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None,
+		OutHit,
+		true,
+		FLinearColor::Red,
+		FLinearColor::Green,
+		2.0f
+	);
+
+	if (bHit && OutHit.GetActor())
+	{
+		// Dodaj trafionego aktora do listy
+		HitActors.AddUnique(OutHit.GetActor());
+		OnHit(OutHit);
+	}
+}
+
+void AWeapon::OnHit(const FHitResult& HitResult)
+{
+	// Logowanie miejsca zderzenia
+	if (HitResult.GetActor())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon hit: %s at location: %s"), 
+			*HitResult.GetActor()->GetName(), 
+			*HitResult.ImpactPoint.ToString());
+
+		/*AActor* HitActor = HitResult.GetActor();
+		if (!HitActor) return;
+		if (HitActor->Implements<UCombatInterface>())
+		{
+			ICombatInterface::Execute_GetHit(HitActor, 20.f);
+		}*/
+
+		/*if (bShowDebugTrace)
+		{
+			DrawDebugSphere(
+				GetWorld(),
+				HitResult.ImpactPoint,
+				10.0f,
+				12,
+				FColor::Orange,
+				false,
+				3.0f
+			);
+		}*/
+	}
+}
+
+void AWeapon::PerformBoxTrace()
+{
+	FHitResult HitResult;
+	BoxTrace(HitResult);
+}
+
+void AWeapon::ClearHitActors()
+{
+	HitActors.Empty();
+}
 
