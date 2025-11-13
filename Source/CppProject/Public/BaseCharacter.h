@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PawnState.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
@@ -23,6 +24,9 @@ protected:
 
 public:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	PawnState PawnState;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	AWeapon* EquippedWeapon;
 	
