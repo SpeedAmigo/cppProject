@@ -23,10 +23,10 @@ protected:
 
 public:
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Basic")
 	UStaticMeshComponent* Mesh;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Basic")
 	UBoxComponent* Collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
@@ -37,6 +37,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	USceneComponent* TraceEnd;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat");
+	int Damage;
 	
 	UPROPERTY()
 	TArray<AActor*> HitActors;

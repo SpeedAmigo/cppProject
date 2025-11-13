@@ -4,6 +4,7 @@
 #include "Weapon.h"
 
 #include "ABasePlayerCharacter.h"
+#include "Combat.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -125,31 +126,18 @@ void AWeapon::BoxTrace(FHitResult& OutHit)
 void AWeapon::OnHit(const FHitResult& HitResult)
 {
 	// Logowanie miejsca zderzenia
-	if (HitResult.GetActor())
+	if (AActor* HitActor = HitResult.GetActor())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Weapon hit: %s at location: %s"), 
 			*HitResult.GetActor()->GetName(), 
 			*HitResult.ImpactPoint.ToString());
 
-		/*AActor* HitActor = HitResult.GetActor();
-		if (!HitActor) return;
-		if (HitActor->Implements<UCombatInterface>())
+		//AActor* HitActor = HitResult.GetActor();
+		//if (!HitActor) return;
+		if (HitActor->GetClass()->ImplementsInterface(UCombat::StaticClass()))
 		{
-			ICombatInterface::Execute_GetHit(HitActor, 20.f);
-		}*/
-
-		/*if (bShowDebugTrace)
-		{
-			DrawDebugSphere(
-				GetWorld(),
-				HitResult.ImpactPoint,
-				10.0f,
-				12,
-				FColor::Orange,
-				false,
-				3.0f
-			);
-		}*/
+			ICombat::Execute_GetHit(HitActor, Damage);
+		}
 	}
 }
 
