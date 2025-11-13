@@ -56,7 +56,9 @@ void AWeapon::Pick_Up(AActor* actor)
 
 	FAttachmentTransformRules Rules(EAttachmentRule::SnapToTarget, true);
 	AttachToComponent(Character->GetMesh(), Rules, SocketName);
-
+	
+	SetOwner(Character);
+	
 	SetActorEnableCollision(false);
 	
 	UE_LOG(LogTemp, Display, TEXT("Pick Up"));
@@ -92,7 +94,11 @@ void AWeapon::BoxTrace(FHitResult& OutHit)
 	// Ustawienie kana³ów kolizji do ignorowania
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
-	ActorsToIgnore.Add(GetOwner());
+	
+	if (AActor* WeaponOwner = GetOwner())
+	{
+		ActorsToIgnore.Add(WeaponOwner);
+	}
 	
 	// Dodaj wszystkich ju¿ trafionych aktorów do ignorowania
 	ActorsToIgnore.Append(HitActors);
