@@ -14,12 +14,17 @@ AWeapon::AWeapon()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Visual"));
+	Mesh->SetupAttachment(RootComponent);	
 	
+	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	Collider->SetupAttachment(Mesh);
+
 	TraceStart = CreateDefaultSubobject<USceneComponent>(TEXT("TraceStart"));
-	TraceStart->SetupAttachment(RootComponent);
+	TraceStart->SetupAttachment(Mesh);
 
 	TraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("TraceEnd"));
-	TraceEnd->SetupAttachment(RootComponent);
+	TraceEnd->SetupAttachment(Mesh);
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +32,7 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Collider = Cast<UBoxComponent>(GetDefaultSubobjectByName(TEXT("BoxCollision")));
+	//Collider = Cast<UBoxComponent>(GetDefaultSubobjectByName(TEXT("BoxCollision")));
 }
 
 // Called every frame

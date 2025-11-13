@@ -22,8 +22,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-
-	UPROPERTY(EditAnywhere)
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	UStaticMeshComponent* Mesh;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	UBoxComponent* Collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
