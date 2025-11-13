@@ -28,7 +28,15 @@ void UAttributes::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (Stamina < MaxStamina)
+	{
+		Stamina += DeltaTime * StaminaCosts.StaminaRegenRate;
+
+		if (Stamina > MaxStamina)
+		{
+			Stamina = MaxStamina;
+		}
+	}
 }
 
 void UAttributes::SetHealth(int32 NewHealth)
@@ -40,5 +48,29 @@ void UAttributes::SetMaxHealth(int32 NewMaxHealth)
 {
 	MaxHealth = FMath::Max(NewMaxHealth, 1);
 }
+
+void UAttributes::SetStamina(float NewStamina)
+{
+	Stamina = FMath::Clamp(NewStamina, 0.f, MaxStamina);
+}
+
+void UAttributes::SetMaxStamina(float NewMaxStamina)
+{
+	MaxStamina = FMath::Max(NewMaxStamina, 1.f);
+}
+
+bool UAttributes::CanPayStaminaCost(float cost)
+{
+	return Stamina >= cost;
+}
+
+void UAttributes::PayStamina(float cost)
+{
+	if (CanPayStaminaCost(cost))
+	{
+		Stamina = FMath::Clamp(Stamina - cost, 0.f, MaxStamina);
+	}
+}
+
 
 
