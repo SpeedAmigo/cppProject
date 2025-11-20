@@ -10,7 +10,6 @@
 /**
  * 
  */
-class UAttributes;
 class USphereComponent;
 
 UCLASS()
@@ -19,10 +18,6 @@ class CPPPROJECT_API AEnemyBaseCharacter : public ABaseCharacter, public ICombat
 	GENERATED_BODY()
 	
 public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basics", meta = (AllowPrivateAccess = "true"))
-	UAttributes* Attributes;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basics")
 	USphereComponent* SphereComponent;
 

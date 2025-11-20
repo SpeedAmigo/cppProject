@@ -3,12 +3,15 @@
 
 #include "BaseCharacter.h"
 
+#include "Attributes.h"
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Attributes = CreateDefaultSubobject<UAttributes>(TEXT("Attributes"));
 }
 
 // Called when the game starts or when spawned

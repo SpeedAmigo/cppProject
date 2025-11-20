@@ -7,7 +7,8 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
-class AWeapon; // Forward declare the weapon class
+class AWeapon;// Forward declare the weapon class
+class UAttributes;
 
 UCLASS()
 class CPPPROJECT_API ABaseCharacter : public ACharacter
@@ -23,6 +24,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basics", meta = (AllowPrivateAccess = "true"))
+	UAttributes* Attributes;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
 	PawnState PawnState;

@@ -16,8 +16,6 @@ AEnemyBaseCharacter::AEnemyBaseCharacter()
 
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBaseCharacter::OnSphereBeginOverlap);
 	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &AEnemyBaseCharacter::OnSphereEndOverlap);
-	
-	Attributes = CreateDefaultSubobject<UAttributes>(TEXT("Attributes"));
 }
 
 void AEnemyBaseCharacter::BeginPlay()

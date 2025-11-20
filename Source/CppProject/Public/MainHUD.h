@@ -1,24 +1,55 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// cpp
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "MainHUD.generated.h"
 
-/**
- * 
- */
+class UProgressBar;
+class UAttributes;
+
 UCLASS()
 class CPPPROJECT_API UMainHUD : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* HealthBar;
+
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* StaminaBar;
+	
+	/*// Slider bindings in Blueprint can call these
+	UFUNCTION(BlueprintCallable)
+	int HealthUpdate();
+
+	UFUNCTION(BlueprintCallable)
+	float StaminaUpdate();*/
+
 protected:
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
-	UFUNCTION(BlueprintCallable)
-	void UpdateHealth(float Current, float Max);
+	void UpdateHealthBar();
+	void UpdateStaminaBar();
 
-	UFUNCTION(BlueprintCallable)
-	void UpdateStamina(float Current, float Max);
+private:
+	// Cached pointer to attributes
+	UPROPERTY()
+	UAttributes* Attributes = nullptr;
+
+	// Cached values (optional for cheap access)
+	int CachedHealth = 0;
+	float CachedStamina = 0.f;
+
+	// Delegate handlers
+	UFUNCTION()
+	void HandleHealthChanged(int32 NewHealth);
+
+	UFUNCTION()
+	void HandleStaminaChanged(float NewStamina);
+
+	// Helper to acquire attributes from owning pawn
+	void InitAttributes();
 };

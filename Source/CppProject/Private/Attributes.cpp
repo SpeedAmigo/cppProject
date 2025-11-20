@@ -36,27 +36,34 @@ void UAttributes::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 		{
 			Stamina = MaxStamina;
 		}
+		OnStaminaChanged.Broadcast(Stamina);
 	}
+
+	OnHealthChanged.Broadcast(Health);
 }
 
 void UAttributes::SetHealth(int32 NewHealth)
 {
 	Health = FMath::Clamp(NewHealth, 0, MaxHealth);
+	OnHealthChanged.Broadcast(Health);
 }
 
 void UAttributes::SetMaxHealth(int32 NewMaxHealth)
 {
 	MaxHealth = FMath::Max(NewMaxHealth, 1);
+	OnMaxHealthChanged.Broadcast(MaxHealth);
 }
 
 void UAttributes::SetStamina(float NewStamina)
 {
 	Stamina = FMath::Clamp(NewStamina, 0.f, MaxStamina);
+	OnStaminaChanged.Broadcast(Stamina);
 }
 
 void UAttributes::SetMaxStamina(float NewMaxStamina)
 {
 	MaxStamina = FMath::Max(NewMaxStamina, 1.f);
+	OnMaxStaminaChanged.Broadcast(MaxStamina);
 }
 
 bool UAttributes::CanPayStaminaCost(float cost)
