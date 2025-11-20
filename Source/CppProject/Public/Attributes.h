@@ -70,6 +70,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Stamina")
 	void PayStamina(float cost);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", meta = (AllowPrivateAccess = "true"))
+	FStaminaCosts StaminaCosts;
 	
 	// Sets default values for this component's properties
 	UAttributes();
@@ -93,6 +96,5 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", meta = (AllowPrivateAccess = "true"))
 	float MaxStamina;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", meta = (AllowPrivateAccess = "true"))
-	FStaminaCosts StaminaCosts;
+
 };

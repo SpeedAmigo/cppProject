@@ -2,6 +2,8 @@
 
 
 #include "ABasePlayerCharacter.h"
+
+#include "Attributes.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
@@ -67,6 +69,10 @@ void AABasePlayerCharacter::Interact()
 
 void AABasePlayerCharacter::Attack()
 {
+	if (!Attributes->CanPayStaminaCost(Attributes->StaminaCosts.StaminaCost_Attack)) return;
+
+	Attributes->PayStamina(Attributes->StaminaCosts.StaminaCost_Attack);
+	
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	if (AnimInstance && AttackMontage)

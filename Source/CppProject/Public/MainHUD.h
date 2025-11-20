@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "MainHUD.generated.h"
 
 class UProgressBar;
@@ -14,6 +15,9 @@ class CPPPROJECT_API UMainHUD : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Text;
+	
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* HealthBar;
 

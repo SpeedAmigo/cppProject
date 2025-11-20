@@ -21,7 +21,7 @@ class CPPPROJECT_API AABasePlayerCharacter : public ABaseCharacter
 
 protected:
 	AABasePlayerCharacter();
-
+	
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void Interact();
