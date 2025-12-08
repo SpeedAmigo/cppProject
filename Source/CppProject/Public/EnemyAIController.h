@@ -25,6 +25,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
+
 	bool InitializeBlackboard();
 
 	UPROPERTY(EditDefaultsOnly, Category = "BehaviourTree")
@@ -32,10 +33,7 @@ protected:
 
 	UPROPERTY(Transient)
 	UBlackboardComponent* BlackboardComp;
-
-	UPROPERTY(Transient)
-	UBehaviorTreeComponent* BehaviorComp;
-
+	
 	// Perception
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	UAIPerceptionComponent* PerceptionComp;
@@ -46,6 +44,7 @@ protected:
 	// Blackboard key names
 	static const FName CanSeePlayer;
 	static const FName TargetActor;
+	static const FName LastKnownPlayerlocation;
 
 	// Perception callback
 	UFUNCTION()

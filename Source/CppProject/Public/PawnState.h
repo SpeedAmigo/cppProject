@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 
-UENUM(BlueprintType)
-enum class PawnState : uint8
+UENUM()
+enum class PawnState
 {
 	Idle UMETA(DisplayName = "Idle"),
 	InCombat UMETA(DisplayName = "InCombat"),

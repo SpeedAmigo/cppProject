@@ -6,30 +6,33 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Misc/LowLevelTestAdapter.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
 
 const FName AEnemyAIController::CanSeePlayer(TEXT("CanSeePlayer"));
 const FName AEnemyAIController::TargetActor(TEXT("TargetActor"));
+const FName AEnemyAIController::LastKnownPlayerlocation(TEXT("LastKnownPlayerlocation"));
 
 AEnemyAIController::AEnemyAIController()
 {
 	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
-	BehaviorComp  = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
 
 	PerceptionComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComp"));
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 
-	SightConfig->SightRadius = 2000.f;
-	SightConfig->LoseSightRadius = 2200.f;
+	SightConfig->SightRadius = 1000.f;
+	SightConfig->LoseSightRadius = 1100.f;
 	SightConfig->PeripheralVisionAngleDegrees = 90.f;
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 
 	PerceptionComp->ConfigureSense(*SightConfig);
-	PerceptionComp->SetDominantSense(SightConfig->GetSenseImplementation());
+	PerceptionComp->SetDominantSense(UAISense_Sight::StaticClass());
+
+	UE_LOG(LogTemp, Log, TEXT("SightRadius = %f (cm), LoseSightRadius = %f (cm)"), SightConfig->SightRadius, SightConfig->LoseSightRadius);
 
 	PerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyAIController::OnTargetPerceptionUpdated);
 }
@@ -37,7 +40,7 @@ AEnemyAIController::AEnemyAIController()
 void AEnemyAIController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (BehaviorTreeAsset)
 	{
 		InitializeBlackboard();
@@ -48,31 +51,18 @@ void AEnemyAIController::BeginPlay()
 void AEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	UE_LOG(LogTemp, Log, TEXT("AEnemyAIController::OnPossess called for %s"), *GetNameSafe(InPawn));
 
-	if (!BehaviorTreeAsset)
+	// Visual debug draw: show sight radii at pawn location
+	APawn* MyPawn = GetPawn();
+	if (MyPawn && SightConfig)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BehaviorTreeAsset not assigned on %s - blackboard won't be initialized"), *GetNameSafe(this));
-		return;
-	}
+		const FVector Loc = MyPawn->GetActorLocation();
 
-	if (InitializeBlackboard())
-	{
-		UE_LOG(LogTemp, Log, TEXT("Blackboard initialized on %s"), *GetNameSafe(this));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to initialize blackboard on %s"), *GetNameSafe(this));
-	}
+		// Sight radius (green)
+		DrawDebugSphere(GetWorld(), Loc, SightConfig->SightRadius, 32, FColor::Green, true /*persistent*/, -1.f /*life*/, 0 /*depthPriority*/, 2.f /*thickness*/);
 
-	// start the behavior tree for this pawn
-	if (!RunBehaviorTree(BehaviorTreeAsset))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("RunBehaviorTree failed on %s"), *GetNameSafe(this));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("Behavior tree started on %s"), *GetNameSafe(this));
+		// Lose sight radius (red)
+		DrawDebugSphere(GetWorld(), Loc, SightConfig->LoseSightRadius, 32, FColor::Red, true, -1.f, 0, 2.f);
 	}
 }
 
@@ -96,11 +86,14 @@ void AEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus St
 	if (bSensed)
 	{
 		BlackboardComp->SetValueAsObject(TargetActor, Actor);
+		BlackboardComp->SetValueAsBool(CanSeePlayer, true);
 		UE_LOG(LogTemp, Display, TEXT("Sensed Player"));
 	}
 	else
 	{
+		BlackboardComp->SetValueAsVector(LastKnownPlayerlocation, Actor->GetActorLocation());
 		BlackboardComp->SetValueAsObject(TargetActor, nullptr);
+		BlackboardComp->SetValueAsBool(CanSeePlayer, false);
 		UE_LOG(LogTemp, Display, TEXT("Cannot see the player"));
 	}
 }
