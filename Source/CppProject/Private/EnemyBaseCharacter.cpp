@@ -5,6 +5,7 @@
 
 #include "ABasePlayerCharacter.h"
 #include "Attributes.h"
+#include "EnemyAIController.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -16,6 +17,10 @@ AEnemyBaseCharacter::AEnemyBaseCharacter()
 
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBaseCharacter::OnSphereBeginOverlap);
 	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &AEnemyBaseCharacter::OnSphereEndOverlap);
+
+	AIControllerClass = AEnemyAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	
 }
 
 void AEnemyBaseCharacter::BeginPlay()

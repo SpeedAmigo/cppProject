@@ -7,10 +7,11 @@
 #include "Combat.h"
 #include "EnemyBaseCharacter.generated.h"
 
+class AEnemyAIController;
+class USphereComponent;
 /**
  * 
  */
-class USphereComponent;
 
 UCLASS()
 class CPPPROJECT_API AEnemyBaseCharacter : public ABaseCharacter, public ICombat

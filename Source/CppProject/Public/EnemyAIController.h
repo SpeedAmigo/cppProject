@@ -6,6 +6,9 @@
 #include "AIController.h"
 #include "EnemyAIController.generated.h"
 
+class UBehaviorTree;
+class UBlackboardComponent;
+class UBehaviorTreeComponent;
 /**
  * 
  */
@@ -13,5 +16,22 @@ UCLASS()
 class CPPPROJECT_API AEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
+
+public:
+	AEnemyAIController();
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* InPawn) override;
+	bool InitializeBlackboard();
+
+	UPROPERTY(EditDefaultsOnly, Category = "BehaviourTree")
+	UBehaviorTree* BehaviorTreeAsset;
+
+	UPROPERTY(Transient)
+	UBlackboardComponent* BlackboardComp;
+
+	UPROPERTY(Transient)
+	UBehaviorTreeComponent* BehaviorComp;
 	
 };
