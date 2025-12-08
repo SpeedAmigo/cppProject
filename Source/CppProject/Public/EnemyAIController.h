@@ -9,6 +9,8 @@
 class UBehaviorTree;
 class UBlackboardComponent;
 class UBehaviorTreeComponent;
+class UAIPerceptionComponent;
+class UAISenseConfig_Sight;
 /**
  * 
  */
@@ -33,5 +35,19 @@ protected:
 
 	UPROPERTY(Transient)
 	UBehaviorTreeComponent* BehaviorComp;
-	
+
+	// Perception
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	UAIPerceptionComponent* PerceptionComp;
+
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	UAISenseConfig_Sight* SightConfig;
+
+	// Blackboard key names
+	static const FName CanSeePlayer;
+	static const FName TargetActor;
+
+	// Perception callback
+	UFUNCTION()
+	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 };
