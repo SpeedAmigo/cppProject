@@ -3,6 +3,8 @@
 
 #include "EnemyAIController.h"
 
+#include "ABaseEnemyCharacter.h"
+#include "BaseCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -40,6 +42,8 @@ AEnemyAIController::AEnemyAIController()
 void AEnemyAIController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	EnemyPawn = Cast<ABaseCharacter>(GetPawn());
 	
 	if (BehaviorTreeAsset)
 	{
@@ -88,12 +92,28 @@ void AEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus St
 		BlackboardComp->SetValueAsObject(TargetActor, Actor);
 		BlackboardComp->SetValueAsBool(CanSeePlayer, true);
 		UE_LOG(LogTemp, Display, TEXT("Sensed Player"));
+
+		if (EnemyPawn)
+		{
+			EnemyPawn->State = PawnState::InCombat;
+		}
 	}
 	else
 	{
-		BlackboardComp->SetValueAsVector(LastKnownPlayerlocation, Actor->GetActorLocation());
 		BlackboardComp->SetValueAsObject(TargetActor, nullptr);
-		BlackboardComp->SetValueAsBool(CanSeePlayer, false);
+
+		if (Actor)
+		{
+			BlackboardComp->SetValueAsVector(LastKnownPlayerlocation, Actor->GetActorLocation());
+		}
+
+		if (EnemyPawn)
+		{
+			EnemyPawn->State = PawnState::Search;
+		}
+		
+		//BlackboardComp->SetValueAsBool(CanSeePlayer, false);
+		
 		UE_LOG(LogTemp, Display, TEXT("Cannot see the player"));
 	}
 }

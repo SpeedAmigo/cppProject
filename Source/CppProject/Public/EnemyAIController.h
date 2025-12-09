@@ -11,6 +11,7 @@ class UBlackboardComponent;
 class UBehaviorTreeComponent;
 class UAIPerceptionComponent;
 class UAISenseConfig_Sight;
+class ABaseCharacter;
 /**
  * 
  */
@@ -27,6 +28,9 @@ protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 	bool InitializeBlackboard();
+
+	UPROPERTY()
+	ABaseCharacter* EnemyPawn;
 
 	UPROPERTY(EditDefaultsOnly, Category = "BehaviourTree")
 	UBehaviorTree* BehaviorTreeAsset;

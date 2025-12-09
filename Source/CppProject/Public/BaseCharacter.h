@@ -29,7 +29,7 @@ public:
 	UAttributes* Attributes;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
-	PawnState PawnState;
+	PawnState State;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	AWeapon* EquippedWeapon;

@@ -27,12 +27,12 @@ void AEnemyBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PawnState = PawnState::Idle;
+	State = PawnState::Patrol;
 }
 
 void AEnemyBaseCharacter::GetHit_Implementation(int damage)
 {
-	PawnState = PawnState::Occupied;
+	State = PawnState::Occupied;
 	
 	int Health = Attributes->GetHealth();
 	
@@ -40,6 +40,7 @@ void AEnemyBaseCharacter::GetHit_Implementation(int damage)
 
 	if (Health <= 0)
 	{
+		State = PawnState::Dead;
 		UE_LOG(LogTemp, Warning, TEXT("Object Destroyed"));
 
 		PlayAnimMontage(DieMontage);
@@ -51,8 +52,10 @@ void AEnemyBaseCharacter::GetHit_Implementation(int damage)
 	}
 	else
 	{
+		State = PawnState::Occupied;
 		UE_LOG(LogTemp, Display, TEXT("Object Hitted"));
 		Attributes->SetHealth(Health);
+		
 		PlayAnimMontage(GettingHitMontage);
 
 		if (HitSound)
@@ -76,7 +79,7 @@ void AEnemyBaseCharacter::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 	{
 		UE_LOG(LogTemp, Log, TEXT("Player enter: %s"), *OtherActor->GetName());
 		OverlappingActors.Add(OtherActor);
-		PawnState = PawnState::InCombat;
+		//State = PawnState::InCombat;
 		PlayAnimMontage(AttackMontage);
 	}
 }
@@ -92,10 +95,21 @@ void AEnemyBaseCharacter::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComp
 		OverlappingActors.Remove(OtherActor);
 	}
 
-	PawnState = PawnState::Idle;
+	//State = PawnState::Idle;
 }
 
 void AEnemyBaseCharacter::Die()
 {
 	Destroy();
+}
+
+void AEnemyBaseCharacter::GetHit()
+{
+	State = PawnState::InCombat;
+}
+
+PawnState AEnemyBaseCharacter::ChangeState(PawnState value)
+{
+	State = value;
+	return value;
 }

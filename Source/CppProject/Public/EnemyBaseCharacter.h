@@ -39,6 +39,10 @@ public:
 	
 	UFUNCTION()
 	void Die();
+	void GetHit();
+
+	UFUNCTION(BlueprintCallable)
+	PawnState ChangeState(PawnState value);
 	
 protected:
 
@@ -48,7 +52,7 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 
 	void GetHit_Implementation(int damage);
-
+	
 	UFUNCTION()
 	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 							  UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
