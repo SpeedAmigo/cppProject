@@ -22,6 +22,7 @@ class CPPPROJECT_API AEnemyAIController : public AAIController
 
 public:
 	AEnemyAIController();
+	void GetHit();
 
 protected:
 	virtual void BeginPlay() override;

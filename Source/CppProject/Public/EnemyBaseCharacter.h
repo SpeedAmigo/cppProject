@@ -8,7 +8,6 @@
 #include "EnemyBaseCharacter.generated.h"
 
 class AEnemyAIController;
-class USphereComponent;
 /**
  * 
  */
@@ -19,9 +18,6 @@ class CPPPROJECT_API AEnemyBaseCharacter : public ABaseCharacter, public ICombat
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basics")
-	USphereComponent* SphereComponent;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montages")
 	UAnimMontage* AttackMontage;
 	
@@ -39,7 +35,6 @@ public:
 	
 	UFUNCTION()
 	void Die();
-	void GetHit();
 
 	UFUNCTION(BlueprintCallable)
 	void AttackPlayer();
@@ -56,15 +51,6 @@ protected:
 
 	void GetHit_Implementation(int damage);
 	
-	UFUNCTION()
-	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-							  UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-							  bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 	UPROPERTY()
 	TSet<AActor*> OverlappingActors;
 };

@@ -3,6 +3,7 @@
 
 #include "HitNotify.h"
 
+#include "EnemyAIController.h"
 #include "EnemyBaseCharacter.h"
 
 void UHitNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -11,7 +12,7 @@ void UHitNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Ani
 	Super::Notify(MeshComp, Animation, EventReference);
 
 	if (!MeshComp) return;
-	if (AEnemyBaseCharacter* Enemy = Cast<AEnemyBaseCharacter>(MeshComp->GetOwner()))
+	if (AEnemyAIController* Enemy = Cast<AEnemyAIController>(MeshComp->GetOwner()))
 	{
 		Enemy->GetHit();
 	}

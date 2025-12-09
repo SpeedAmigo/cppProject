@@ -80,6 +80,30 @@ bool AEnemyAIController::InitializeBlackboard()
 	return false;
 }
 
+void AEnemyAIController::GetHit()
+{
+	if (!BlackboardComp) return;
+
+	AActor* Target = Cast<AActor>(
+		BlackboardComp->GetValueAsObject(TargetActor)
+	);
+	
+	if (Target)
+	{
+		if (EnemyPawn)
+		{
+			EnemyPawn->State = PawnState::InCombat;
+		}
+	}
+	else
+	{
+		if (EnemyPawn)
+		{
+			EnemyPawn->State = PawnState::Search;
+		}
+	}
+}
+
 void AEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	if (!BlackboardComp) return;
