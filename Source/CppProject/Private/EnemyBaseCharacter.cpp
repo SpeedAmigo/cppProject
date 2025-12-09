@@ -70,21 +70,27 @@ void AEnemyBaseCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 }
 
-void AEnemyBaseCharacter::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+/*void AEnemyBaseCharacter::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!OtherActor || OtherActor == this) return;
+
+	if (State == PawnState::Dead || State == PawnState::Occupied) return;
 
 	if (AABasePlayerCharacter* Player = Cast<AABasePlayerCharacter>(OtherActor))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Player enter: %s"), *OtherActor->GetName());
 		OverlappingActors.Add(OtherActor);
-		//State = PawnState::InCombat;
-		PlayAnimMontage(AttackMontage);
-	}
-}
 
-void AEnemyBaseCharacter::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+		if (Attributes->CanPayStaminaCost(Attributes->StaminaCosts.StaminaCost_Attack))
+		{
+			Attributes->PayStamina(Attributes->StaminaCosts.StaminaCost_Attack);
+			PlayAnimMontage(AttackMontage);
+		}
+	}
+}*/
+
+/*void AEnemyBaseCharacter::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (!OtherActor || OtherActor == this) return;
@@ -96,7 +102,7 @@ void AEnemyBaseCharacter::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComp
 	}
 
 	//State = PawnState::Idle;
-}
+}*/
 
 void AEnemyBaseCharacter::Die()
 {
@@ -106,6 +112,16 @@ void AEnemyBaseCharacter::Die()
 void AEnemyBaseCharacter::GetHit()
 {
 	State = PawnState::InCombat;
+}
+
+void AEnemyBaseCharacter::AttackPlayer()
+{
+	if (Attributes->CanPayStaminaCost(Attributes->StaminaCosts.StaminaCost_Attack))
+	{
+		Attributes->PayStamina(Attributes->StaminaCosts.StaminaCost_Attack);
+		PlayAnimMontage(AttackMontage);
+	}
+	UE_LOG(LogTemp, Log, TEXT("Enemy Attacks"))
 }
 
 PawnState AEnemyBaseCharacter::ChangeState(PawnState value)

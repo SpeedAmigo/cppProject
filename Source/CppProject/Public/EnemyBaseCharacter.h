@@ -42,6 +42,9 @@ public:
 	void GetHit();
 
 	UFUNCTION(BlueprintCallable)
+	void AttackPlayer();
+
+	UFUNCTION(BlueprintCallable)
 	PawnState ChangeState(PawnState value);
 	
 protected:
